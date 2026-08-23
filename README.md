@@ -1,6 +1,7 @@
 # Landing page
 
-Two static files, no build step. Open `index.html` and it works.
+Static landing page with no build step. Open `index.html` and it works. Original
+project imagery lives in `assets/` rather than large embedded data URIs.
 
 ## Before it goes live
 
@@ -25,5 +26,4 @@ you edit the HTML, and to change Bahasa you edit the dictionary.
 
 ## Notes
 
-Images are inlined as data URIs so both files are self-contained and can be
-hosted anywhere, including as a Claude Artifact. Total ~850KB.
+The page uses progressive enhancement and respects reduced-motion preferences.
