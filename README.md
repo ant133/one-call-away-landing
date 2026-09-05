@@ -1,29 +1,41 @@
-# Landing page
+# One Call Away landing page and Android mockup
 
-Static landing page with no build step. Open `index.html` and it works. Original
-project imagery lives in `assets/` rather than large embedded data URIs.
+Static HTML, CSS, and JavaScript; no build step or dependencies.
 
-## Before it goes live
+Run `python3 -m http.server 8080 --directory landing` from the repository root,
+then open `http://localhost:8080`.
 
-1. **Supabase** — set `SUPABASE_URL` and `SUPABASE_ANON_KEY` at the top of the
-   `<script>` in `index.html`. Run `backend/supabase/migrations/0001_waitlist.sql`
-   first: the table is insert-only via RLS, which is what makes it safe to ship
-   the anon key in a public page. The form cannot read the list back.
+- `index.html`: responsive landing page with English/Bahasa Indonesia copy.
+- `mockup.html`: eight-screen Android design board.
+- `mockup.html?mode=interactive&screen=welcome`: connected prototype.
+- `mockup.html?embed=1&screen=home`: individual screen, also used by the hero previews.
 
-2. **WhatsApp channel** — two placeholder `href="#"` links: the footer of
-   `index.html` and the button on `thanks.html` (`id="wa"`). Drop the real link in.
+The eight screens are Welcome, Home, People, Person details, Record a memory,
+Review memories, Reminders, and Settings. The prototype uses sample data. It
+simulates recording, supports editing and saving memories within a preview,
+searches people, and changes reminder preferences. It does not access the
+microphone, device calendar, Android settings, or backend. Reloading resets it.
+The production Kotlin application in `android/` is not changed by this mockup.
 
-3. **Privacy link** — footer of `index.html`, also `href="#"`.
+## Files
 
-## Languages
+- `landing.css`, `landing.js`: marketing layout, translations, waitlist submission.
+- `app.css`, `app.js`: shared mockup design tokens, screens, and interactions.
+- `waitlist-config.js`: existing public Supabase URL and publishable key. Never
+  place service-role keys or backend secrets here.
+- `assets/generated/`: four original AI-generated PNGs and optimized JPEGs used
+  by the site. Asset prompts and handoff notes are in `../docs/UI Design.md`.
+- `qa/`: screenshots from local visual verification.
 
-English by default; Bahasa if the browser reports `id-*`, and the EN/ID switch in
-the header overrides either way. Every string lives in the `I18N.id` object in
-`index.html` — English is read from the markup itself, so to change English copy
-you edit the HTML, and to change Bahasa you edit the dictionary.
+## Waitlist
 
-`thanks.html` reads `?lang=id` to match, which the form appends automatically.
+The existing insert-only Supabase waitlist integration is preserved. Its schema
+and policy are in `backend/supabase/migrations/0001_waitlist.sql`. The form keeps
+its email value on failure, prevents duplicate submissions while pending, times
+out after 15 seconds, and redirects to `thanks.html?lang=en` or `?lang=id` only on
+a successful insert or duplicate-address response. A missing configuration
+shows an error instead of claiming the visitor joined.
 
-## Notes
-
-The page uses progressive enhancement and respects reduced-motion preferences.
+English is the default unless the browser uses Indonesian. The EN/ID switch
+persists an optional `oca-lang` preference. The Android concept uses English.
+Google Fonts is optional; the layout falls back to the system sans-serif font.
